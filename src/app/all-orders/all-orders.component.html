@@ -1,0 +1,88 @@
+<!-- <section class="container  bg-body-tertiary rounded shadow p-3 mb-4" *ngIf="orderDetails.length>0 ;else msg" >
+    <h1 class=" text-uppercase text-center">All Orders</h1>
+    <div  [class.bg-primary-subtle]="num"  class="border p-4 shadow rounded mb-5 overflow-hidden" *ngFor="let item of orderDetails;let num = odd,let x= index">
+        <h2 class="h4">Order Number: {{x+1}}</h2>
+        <h2 class="text-main fw-bold">Total Price: {{item.totalOrderPrice}}</h2>
+        <div class="row align-items-center rounded shadow order-card p-2 my-2" *ngFor="let cart of item.cartItems ">
+            <div class="col-md-2">
+                <img class="w-100 mb-2" [src]="cart.product.imageCover" alt="">
+            </div>
+            <div class="col-md-4">
+                <div>
+                    <h3>{{cart.product.category.name}}</h3>
+                    <h4>{{cart.product.title}}</h4>
+                    <p>price: {{cart.price}}</p>
+                    <div>
+                        <i [class.rating-color]="cart.product.ratingsAverage>= num" *ngFor="let num of [1,2,3,4,5]" class="fa fa-star"></i>
+                        <span>{{cart.product.ratingsAverage}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div>
+                    <h3 class="h5">Payment Method : {{item.paymentMethodType}} </h3>
+                    <h4 class="h6">Paid At:  {{item.paidAt | date}} </h4>
+                    <div class="my-2">
+                        <span class="fw-bold">Shipping Adress:</span>
+                        <ul class="list-unstyled">
+                            <li> <i class="fa fa-city"></i> {{item.shippingAddress.city}}</li>
+                            <li> <i class="fa fa-phone"></i> {{item.shippingAddress.phone}}</li>
+                            <li> <i class="fa fa-info-circle"></i> {{item.shippingAddress.details}}</li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section> -->
+
+<ng-template #msg>
+    <h2 class="text-center">There are no orders to show...</h2>
+</ng-template>
+
+
+
+
+<section class="container  bg-body-tertiary rounded shadow p-3 mb-4" *ngIf="orderDetails.length>0 ;else msg" >
+    <h1 class=" text-uppercase text-center">All Orders</h1>
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion-item"  *ngFor="let item of orderDetails;let num = odd,let x= index" >
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed shadow rounded my-2" type="button" data-bs-toggle="collapse"  [attr.data-bs-target]="'#abohamada'+item._id" aria-expanded="false" aria-controls="flush-collapseOne">
+                <div class="d-flex flex-column order-data">
+                    <h2 class="h4 fw-bolder">Order Number: {{x+1}}</h2>
+                    <h3 class="h6"><span class="text-dark fw-bold">Ordered By :</span> <span class="text-muted fs-6">{{item.shippingAddress.details}}</span></h3>
+                    <h3 class="h6"><span class="text-dark fw-bold">Phone :</span>      <span class="text-muted fs-6">{{item.shippingAddress.phone}}</span></h3>
+                    <h3 class="h6"><span class="text-dark fw-bold">City :</span>       <span class="text-muted fs-6">{{item.shippingAddress.city}}</span></h3>
+                    <h3 class="h6"><span class="text-dark fw-bold">Created at :</span> <span class="text-muted fs-6">{{item.createdAt | date}}</span></h3>
+                    <h3 class="h6"><span class="text-dark fw-bold">Paid at :</span>    <span class="text-muted fs-6">{{item.paidAt | date}}</span></h3>
+                    <h3 class="h6"><span class="text-dark fw-bold">Payment Method : </span> <span class="text-muted fs-6">{{item.paymentMethodType}}</span> </h3>
+                </div>
+            </button>
+        </h2>
+        <div [id]="'abohamada'+item._id" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample" *ngFor="let cart of item.cartItems ">
+            <div class="accordion-body ">
+                <div class="row align-items-center rounded shadow order-card p-2 my-2" *ngFor="let cart of item.cartItems ">
+                    <div class="col-md-2">
+                        <img class="w-100 mb-2" [src]="cart.product.imageCover" alt="">
+                    </div>
+                    <div class="col-md-10">
+                        <div>
+                            <h3>{{cart.product.category.name}}</h3>
+                            <h4>{{cart.product.title}}</h4>
+                            <p>price: {{cart.price}}</p>
+                            <div>
+                                <i [class.rating-color]="cart.product.ratingsAverage>= num" *ngFor="let num of [1,2,3,4,5]" class="fa fa-star"></i>
+                                <span>{{cart.product.ratingsAverage}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+</div>
+
+</section>

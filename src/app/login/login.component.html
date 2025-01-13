@@ -1,0 +1,106 @@
+<div class="container login w-75">
+    <h2 class="my-3">Login Now: </h2>
+    <form class="my-4" (ngSubmit)="loginSubmitMethod()" [formGroup]="loginForm">
+        
+        <div class="mb-4">
+            <label for="">Email:</label>
+            <input #inputEmail formControlName="email" class="form-control" type="email" placeholder="Please enter your email...">
+            <div *ngIf="loginForm.get('email')?.errors && (loginForm.get('email')?.touched || inputEmail.value.length >0)" class="alert alert-danger">
+                <p *ngIf="loginForm.get('email')?.errors?.['required']">email is required</p>
+                <p *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</p>
+            </div>
+        </div>
+        <div class="mb-4 position-relative">
+            <label for="">Password:</label>
+            <input #inputPass formControlName="password" class="form-control" [type]="eye? 'password':'text' " placeholder="Please enter your password...">
+            <i *ngIf="eye&&inputPass.value.length>0" (click)="toggleEye()" class="fa-regular fa-eye pass-icon text-main"></i>
+            <i *ngIf="!eye&&inputPass.value.length>0" (click)="toggleEye()" class="fa-regular fa-eye-slash  pass-icon text-main"></i>
+            <div *ngIf="loginForm.get('password')?.errors && (loginForm.get('password')?.touched || inputPass.value.length >0)" class="alert alert-danger">
+                <p *ngIf="loginForm.get('password')?.errors?.['required']">password is required</p>
+                <p *ngIf="loginForm.get('password')?.errors?.['pattern']">password must start with uppercase letter</p>
+                <p *ngIf="loginForm.get('password')?.errors?.['minlength']">Minimum password length is 6 </p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end align-items-center gap-3">
+            <a (click)="isVisible=true" class="nav-link cursor-pointer">Reset Password?</a>
+            <button [disabled]="loginForm.invalid" type="submit" class="btn bg-main text-white  "><span *ngIf="!isLoading">Login</span> <span *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i></span></button>
+        </div>
+        <p *ngIf="errmsg" class="alert alert-danger text-center my-2">{{errmsg}}</p>
+    </form>
+
+    <!-- FORGET PASSWORD FORM -->
+    <div  (click)="isVisible=false"  *ngIf="isVisible" class="resetPassword-form position-fixed top-0 bottom-0 start-0 end-0 d-flex justify-content-center align-items-center">
+        <div (click)="closeForm($event)" class="main rounded-2 ">
+            <div class="main-head py-2">
+                <h3 class="text-uppercase  position-relative fw-bolder main-title  py-2 text-center">reset password form <i (click)="isVisible=false" class="ms-5 position-absolute  cursor-pointer text-main fa fa-x"></i></h3>
+            </div>
+            <div class="main-body">
+                <!-- =======================Start Form send verification code======================= -->
+                
+                    <form *ngIf="showSendcodeFlag" (ngSubmit)="sendCodeMethod()" [formGroup]="sendVerificationForm">
+                        <h2 class="text-center text-main mt-3">Email</h2>
+                        <div>
+                            <label for="forgetemail">Email:</label>
+                            <input formControlName="email" placeholder="Please Enter Your Email..." class="form-control" type="text" name="" id="forgetemail">
+
+                            <div *ngIf="sendVerificationForm.get('email')?.errors && sendVerificationForm.get('email')?.touched" class="alert alert-danger">
+                                <p *ngIf="sendVerificationForm.get('email')?.errors?.['required']">Email is required</p>
+                                <p *ngIf="sendVerificationForm.get('email')?.errors?.['email']">Please Enter Valid Email</p>
+                            </div>
+                        </div>
+                        <p *ngIf="codeSent" class="alert alert-success mt-1">{{codeSent}}</p>
+                        <p *ngIf="codeSentErr" class="alert alert-danger mt-1">{{codeSentErr}}</p>
+                        <button [disabled]="sendVerificationForm.invalid" type="submit" class="btn bg-main text-white mx-auto d-block mt-3">Send Verification Code <span *ngIf="sendingCode"><i class="fa fa-spinner fa-spin"></i></span></button>
+                    </form>
+                
+                <!--======================= End Form send verification code======================= -->
+                <!--======================= Start Form Verify code======================= -->
+                
+                    <form *ngIf="showverifyFlag" (ngSubmit)="verifyCodeMethod()" [formGroup]="verifyCodeForm" >
+                        <h2 class="text-center text-main mt-3">Reset Code</h2>
+                        <div>
+                            <label for="veify">Reset-Code:</label>
+                            <input   formControlName="resetCode" class="form-control" placeholder="Please enter the code sent" id="veify" type="text">
+                            
+                            <div *ngIf="verifyCodeForm.get('resetCode')?.errors && verifyCodeForm.get('resetCode')?.touched" class="alert alert-danger">
+                                <p *ngIf="verifyCodeForm.get('resetCode')?.errors?.['required']">Code is required</p>
+                                <p *ngIf="verifyCodeForm.get('resetCode')?.errors?.['maxlength']">Code can't be over 6 chars</p>
+                            </div>
+
+                            <p *ngIf="codeSent" class="alert alert-success mt-1">{{codeSent}}</p>
+                            <p *ngIf="codeSentErr" class="alert alert-danger">{{codeSentErr}}</p>
+                        </div>
+
+                        <button type="submit" [disabled]="verifyCodeForm.invalid" class="btn bg-main text-white mx-auto d-block mt-3">Verify Code <span *ngIf="sendingCode"><i class="fa fa-spinner fa-spin"></i></span></button>
+                    </form>
+                <!--======================= End Form Verify code=======================  -->
+                <!--======================= Start Form renew password======================= -->
+                    <form *ngIf="showrenewpassFlag" (ngSubmit)="newPasswordMethod()" [formGroup]="renewPasswordForm">
+                        <h2 class="text-center text-main mt-3">New Password</h2>
+                        <div class="mb-3">
+                            <label for="reEmail">Email:</label>
+                            <input class="form-control" formControlName="email" placeholder="Please enter your email..." id="reEmail" type="text">
+                            
+                            <div *ngIf="renewPasswordForm.get('email')?.errors&& renewPasswordForm.get('email')?.touched" class="alert alert-danger">
+                                <p *ngIf="renewPasswordForm.get('email')?.errors?.['required']">Email is required</p>
+                                <p *ngIf="renewPasswordForm.get('email')?.errors?.['email']">Please Enter Valid E-mail</p>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="rePass">New Password:</label>
+                            <input class="form-control" formControlName="newPassword" placeholder="Please enter new password" id="rePass" type="text">
+                            
+                            <div *ngIf="renewPasswordForm.get('newPassword')?.errors&& renewPasswordForm.get('newPassword')?.touched" class="alert alert-danger">
+                                <p *ngIf="renewPasswordForm.get('newPassword')?.errors?.['required']">New password is required</p>
+                                <p *ngIf="renewPasswordForm.get('newPassword')?.errors?.['pattern']">new password must start with uppercase letter</p>
+                                <p *ngIf="renewPasswordForm.get('newPassword')?.errors?.['minlength']">new password length should be at least 6 </p>
+                            </div>
+                        </div>
+                        <p *ngIf="codeSentErr" class="alert alert-danger">{{codeSentErr}}</p>
+                        <button type="submit" [disabled]="renewPasswordForm.invalid" class="btn bg-main text-white mt-3 d-block mx-auto">Submit <span *ngIf="sendingCode"><i class="fa fa-spinner fa-spin"></i></span></button>
+                    </form>
+                <!--======================= End Form renew password======================= -->
+            </div>
+        </div>  
+    </div>
+</div>

@@ -1,0 +1,18 @@
+section{
+    width: 75%;
+}
+.order-card{
+    transition: all .5s;
+}
+.order-card:hover{
+    transform: scale(1.02);
+}
+@media screen and (max-width:768px) {
+    section{
+        width: 90%;
+    }
+    .order-data h2{
+        font-size: 20px;
+    }
+    
+}

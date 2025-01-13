@@ -1,0 +1,14 @@
+.brand-details{
+    background-color: rgba(0,0,0,0.5);
+}
+.brand-details .main{
+    width: 50%;
+}
+@media screen and (max-width:768px) {
+    .brand-details .main{
+        width: 90%;
+    }
+    .brand-details img{
+        width: 100% !important;
+    }
+}

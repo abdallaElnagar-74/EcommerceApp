@@ -1,0 +1,25 @@
+.cat{
+    transition: transform 1s, box-shadow .5s,border-radius .5s;
+    overflow: hidden;
+}
+.cat:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 2px 5px #0aad0a88  !important;
+    border-radius: 30px !important;
+}
+.brand-details{
+    background-color: rgba(0,0,0,0.5);
+    padding-top: 70px;
+    
+}
+.brand-details .main{
+    width: 50%;
+}
+@media screen and (max-width:768px) {
+    .brand-details .main{
+        width: 90%;
+    }
+    .brand-details img{
+        width: 100% !important;
+    }
+}

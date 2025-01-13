@@ -1,0 +1,33 @@
+:host{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+}
+.main-section{
+padding-top: 80px;
+}
+.btn-up{
+    bottom: 100px;
+    right: 20px;
+    z-index: 999;
+    width: 45px;
+    height: 45px;
+    font-size: 25px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--main-color);
+    color: white;
+}
+.btn-down{
+    bottom: 40px;
+    right: 20px;
+    z-index: 999;
+    width: 45px;
+    height: 45px;
+    font-size: 25px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--main-color);
+    color: white;
+}

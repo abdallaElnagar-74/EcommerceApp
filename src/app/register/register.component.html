@@ -1,0 +1,53 @@
+<div class="container  w-75">
+    <h2 class="my-3">Register Now: </h2>
+    <form class="my-4" (ngSubmit)="registerSubmitMethod()" [formGroup]="registerForm">
+        <div class="mb-4">
+            <label for="">Name:</label>
+            <input #inputName formControlName="name" class="form-control" type="text" placeholder="Please enter your name...">
+            <div *ngIf="registerForm.get('name')?.errors && (registerForm.get('name')?.touched || inputName.value.length >0)" class="alert alert-danger">
+                <p *ngIf="registerForm.get('name')?.errors?.['required']">Name is required</p>
+                <p *ngIf="registerForm.get('name')?.errors?.['minlength']">Minimum name length is 3 chars</p>
+            </div>
+        </div>
+<div class="mb-4">
+            <label for="">Email:</label>
+            <input #inputEmail formControlName="email" class="form-control" type="email" placeholder="Please enter your email...">
+            <div *ngIf="registerForm.get('email')?.errors && (registerForm.get('email')?.touched || inputEmail.value.length >0)" class="alert alert-danger">
+                <p *ngIf="registerForm.get('email')?.errors?.['required']">email is required</p>
+                <p *ngIf="registerForm.get('email')?.errors?.['email']">Please enter a valid email</p>
+            </div>
+        </div>
+        <div class="mb-4 position-relative">
+            <label for="">Password:</label>
+            <input #inputPass formControlName="password" class="form-control" [type]="eyePass? 'password':'text' " placeholder="Please enter your password...">
+                <i *ngIf="eyePass&&inputPass.value.length>0" (click)="toggleEyePass()" class="fa-regular fa-eye pass-icon text-main"></i>
+                <i *ngIf="!eyePass&&inputPass.value.length>0" (click)="toggleEyePass()" class="fa-regular fa-eye-slash  pass-icon text-main "></i>
+            <div *ngIf="registerForm.get('password')?.errors && (registerForm.get('password')?.touched || inputPass.value.length > 0)" class="alert alert-danger">
+                <p *ngIf="registerForm.get('password')?.errors?.['required']">password is required</p>
+                <p *ngIf="registerForm.get('password')?.errors?.['pattern']">password must start with uppercase letter</p>
+                <p *ngIf="registerForm.get('password')?.errors?.['minlength']">Minimum password length is 6 </p>
+            </div>
+        </div>
+        <div class="mb-4 position-relative">
+            <label for="">Re-Password:</label>
+            <input #inputRepass formControlName="rePassword" class="form-control" [type]="eyeRePass?'password' : 'text'  " placeholder="Please enter your password again...">
+            <i *ngIf="eyeRePass&&inputRepass.value.length>0" (click)="toggleEyeRePass()" class="fa-regular fa-eye pass-icon text-main"></i>
+            <i *ngIf="!eyeRePass&&inputRepass.value.length>0" (click)="toggleEyeRePass()" class="fa-regular fa-eye-slash  pass-icon text-main "></i>
+            <div *ngIf="registerForm.get('rePassword')?.errors && (registerForm.get('rePassword')?.touched || inputRepass.value.length > 0)" class="alert alert-danger">
+                <p *ngIf="registerForm.get('rePassword')?.errors?.['required']">rePassword is required</p>
+                <p *ngIf="registerForm.get('rePassword')?.errors?.['pattern']">rePassword must start with uppercase letter</p>
+                <p *ngIf="registerForm.get('rePassword')?.errors?.['minlength']">Minimum rePassword length is 6 </p>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="">Phone:</label>
+            <input #inputPhone formControlName="phone" class="form-control" type="text" placeholder="Please enter your phone...">
+            <div *ngIf="registerForm.get('phone')?.errors && (registerForm.get('phone')?.touched || inputPhone.value.length > 0)" class="alert alert-danger">
+                <p *ngIf="registerForm.get('phone')?.errors?.['required']">phone is required</p>
+                <p *ngIf="registerForm.get('phone')?.errors?.['pattern']">Please enter valid phone number</p>
+            </div>
+        </div>
+        <button [disabled]="registerForm.invalid" type="submit" class="btn bg-main text-white d-block ms-auto "><span *ngIf="!isLoading">Register</span> <span *ngIf="isLoading"><i class="fa fa-spinner fa-spin"></i></span></button>
+        <p *ngIf="errmsg" class="alert alert-danger text-center my-2">{{errmsg}}</p>
+    </form>
+</div>

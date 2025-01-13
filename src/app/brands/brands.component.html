@@ -1,0 +1,28 @@
+<section   class="container my-3" >
+    <div class="row gy-4">
+        <div [routerLink]="['/brandsproducts',item._id]" class="col-md-3" *ngFor="let item of allBrands| paginate: { id: 'brandsPaginate',
+        itemsPerPage: pageSize,
+        currentPage: currentPage,
+        totalItems: total }">
+            <div class="product cursor-pointer">
+                <img [src]="item.image" alt="">
+                <h3 class="text-center">{{item.name}}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center my-3">
+        <pagination-controls  id="brandsPaginate"
+            (pageChange)="pageChanged($event)"
+            (pageBoundsCorrection)="pageChanged($event)"
+            [maxSize]="9"
+            [directionLinks]="true"
+            [autoHide]="true"
+            [responsive]="true"
+            previousLabel="Prev"
+            nextLabel="Next"
+            screenReaderPaginationLabel="Pagination"
+            screenReaderPageLabel="page"
+            screenReaderCurrentLabel="You're on page">
+    </pagination-controls>
+    </div>
+</section>

@@ -1,0 +1,32 @@
+<section class="py-2">
+    <div class="container w-50 informaton">
+        <form (ngSubmit)="checkOut()" [formGroup]="payForm">
+            <div class="mb-4">
+                <label class="mb-1" for="details">Details:</label>
+                <input #inputDetails formControlName="details" class="form-control" type="text" id="details" placeholder="Please enter some details">
+                <div *ngIf="payForm.get('details')?.errors&&(payForm.get('details')?.touched||inputDetails.value.length>0)" class="alert alert-danger">
+                    <p *ngIf="payForm.get('details')?.errors?.['required']">details are required</p>
+                    <p *ngIf="payForm.get('details')?.errors?.['minlength']">minimum details length is 8 </p>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="mb-1" for="phone">Phone:</label>
+                <input #inputPhone formControlName="phone" class="form-control" type="text" id="phone" placeholder="Please enter some phone">
+                <div *ngIf="payForm.get('phone')?.errors&&(payForm.get('phone')?.touched||inputPhone.value.length>0)" class="alert alert-danger">
+                    <p *ngIf="payForm.get('phone')?.errors?.['required']">phone is required</p>
+                    <p *ngIf="payForm.get('phone')?.errors?.['pattern']">Please enter valid phone number</p>
+                </div>
+            </div>
+            <div class="mb-4">  
+                <label class="mb-1" for="city">City:</label>
+                <input #inputcity formControlName="city" class="form-control" type="text" id="city" placeholder="Please enter some city">
+                <div *ngIf="payForm.get('city')?.errors&&(payForm.get('city')?.touched||inputcity.value.length>0)" class="alert alert-danger">
+                    <p *ngIf="payForm.get('city')?.errors?.['required']">City info is required</p>
+                </div>
+            </div>
+            <div>
+                <button [disabled]="payForm.invalid"  class="btn  btn-primary ms-auto d-block" type="submit"><span *ngIf="!isLoading">CheckOut</span> <span *ngIf="isLoading"><i class="fa fa-spin fa-spinner"></i></span></button>
+            </div>
+        </form>
+    </div>
+</section>

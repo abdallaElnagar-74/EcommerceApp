@@ -1,0 +1,167 @@
+<nav #navBar class="navbar navbar-expand-lg bg-white fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" routerLink="/home">
+            <img class="w-100" src="./assets/images/freshcart-logo.svg" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse text-center py-1" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-capitalize" routerLinkActive="active-link" routerLink="home">home</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link text-capitalize" routerLinkActive="active-link" routerLink="products">products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-capitalize" routerLinkActive="active-link" routerLink="categories">categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-capitalize" routerLinkActive="active-link" routerLink="brands">brands</a>
+                </li>
+                
+            </ul>
+            <div class="user">Hello, <span class="fw-bolder text-capitalize">{{userName}}</span></div>
+            
+            <div class="icons d-flex gap-3 ms-auto align-items-center">
+                <div class="d-flex gap-3">
+                    <i class="fa-brands fa-instagram"></i>
+                    <i class="fa-brands fa-facebook"></i>
+                    <i class="fa-brands fa-tiktok"></i>
+                    <i class="fa-brands fa-twitter"></i>
+                    <i class="fa-brands fa-linkedin"></i>
+                    <i class="fa-brands fa-youtube"></i>
+                </div>
+                <a class="nav-link text-capitalize position-relative me-3 " routerLink="wishlist">
+                    <i class="fa fa-heart  text-danger fa-2x fs-2 "></i>
+                    <span class="badge bg-info position-absolute cart">{{wishNum}}</span>
+                </a>
+                <a class="nav-link text-capitalize position-relative me-3 "  routerLink="/cart">
+                    <i class="fas fa-cart-shopping fa-2x fs-2 text-main "></i>
+                    <span class="badge bg-info position-absolute cart">{{cartNum}}</span>
+                </a>
+                <a class="nav-link text-capitalize position-relative me-3 "  >
+                    <i (click)="toglleSetting()" class="fas fa-user-gear cursor-pointer fa-2x fs-2  "></i>
+                    <ul   class="list-unstyled position-absolute  bg-body-tertiary rounded shadow setting ">
+                        <li (click)="toglleSetting()" ><a routerLinkActive="bg-main text-white btn" routerLink="allorders" class=" fw-bold" >All Orders</a></li>
+                        <li (click)="showsetting=true&& nameSettingFlag=true" ><a class="  fw-bold" >Change Name</a></li>
+                        <li (click)="showsetting=true&& passSettingFlag=true" ><a class="  fw-bold" >Change Password</a></li>
+                        <li (click)="showsetting=true&& phoneSettingFlag=true" ><a class="  fw-bold" >Change Phone Number</a></li>
+                        <li (click)="showsetting=true&& emailSettingFlag=true" ><a class="  fw-bold" >Change Email</a></li>
+                        <li><span class="nav-link text-capitalize cursor-pointer" (click)="logOutUser()" >SignOut <i class="fa-solid fa-right-from-bracket"></i></span></li>
+                    </ul>
+                </a>
+                
+                <!-- <span class="nav-link text-capitalize cursor-pointer" routerLink="settings"  ><i class="fa fa-gear"></i></span> -->
+
+                
+            </div>
+        </div>
+    </div>
+</nav>
+<div (click)="closeAllSetting()" *ngIf="showsetting" class="position-fixed top-0 end-0 bottom-0 start-0  setting-form d-flex justify-content-center align-items-center">
+    <div (click)="stop($event)" class="main rounded shadow pb-4  bg-body-tertiary w-50  ">
+        <div class="head position-relative py-2 d-flex justify-content-center border-bottom  ">
+            <h1 class="h3 ">settings </h1>
+            <i (click)="closeAllSetting()" class="fa fa-x fs-5 position-absolute top-50 cursor-pointer  translate-middle"></i>
+        </div> 
+        <div class="allForms">
+
+            <!-- Change Name Form Start -->
+            <div *ngIf="nameSettingFlag" class="form_name my-4">
+                <h2 class="h4 text-center ">Name settings </h2>
+                <form (ngSubmit)="changeName()" [formGroup]="nameForm" class="w-75 mx-auto" >
+                    <div>
+                        <label for="name">Name:</label>
+                        <input [(ngModel)]="inputNameValue" #nameInput formControlName="name" id="name" class="form-control mt-1" type="text" placeholder="Enter new name...">
+                        <div *ngIf="nameForm.get('name')?.errors&&(nameForm.get('name')?.touched || nameInput.value.length>0)" class="alert alert-danger">
+                            <p class="text-center" *ngIf="nameForm.get('name')?.errors?.['required']">name is required</p>
+                        </div>
+                    </div>
+                    <button [disabled]="nameForm.invalid" type="submit" class="btn bg-main text-white mt-3 mx-auto d-block"><span *ngIf="!isLoading">Confirm</span> <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i></button>
+                </form>
+            </div>
+            <!-- Change Name Form End -->
+
+            <!-- Change Pass Form Start -->
+            <div *ngIf="passSettingFlag" class="form_pass my-4">
+                <h2 class="h4 text-center ">Password settings </h2>
+                <form (ngSubmit)="changePass()" [formGroup]="passForm" class="w-75 mx-auto" >
+                    <div class="mb-4 position-relative ">
+                        <label for="pass">Current Password:</label>
+                        <input [(ngModel)]="inputCurrentPassValue" #currentPassInput formControlName="currentPassword" id="pass" class="form-control mt-1" [type]="eyeCurrentPass?'password':'text'  " placeholder="Enter current password">
+                        <i *ngIf="eyeCurrentPass&&currentPassInput.value.length>0" (click)="toggleEyeCurrentPass()" class="fa-regular fa-eye pass-icon text-main"></i>
+                        <i *ngIf="!eyeCurrentPass&&currentPassInput.value.length>0" (click)="toggleEyeCurrentPass()" class="fa-regular fa-eye-slash  pass-icon text-main "></i> 
+                        <div *ngIf="passForm.get('currentPassword')?.errors&&(passForm.get('currentPassword')?.touched || currentPassInput.value.length>0)" class="alert alert-danger">
+                            <p class="text-center" *ngIf="passForm.get('currentPassword')?.errors?.['required']">password is required</p>
+                            <p class="text-center" *ngIf="passForm.get('currentPassword')?.errors?.['pattern']">password must start with uppercase letter</p>
+                            <p class="text-center" *ngIf="passForm.get('currentPassword')?.errors?.['minlength']">minimum password length is 6</p>
+                        </div>
+                    </div>
+                    <div class="mb-4 position-relative">
+                        <label for="newpass">New password:</label>
+                        <input [(ngModel)]="inputNewPassValue" #newPassInput formControlName="password" id="newpass" class="form-control mt-1" [type]="eyeNewPass?'password':'text'  " placeholder="Enter new password">
+                        <i *ngIf="eyeNewPass&&newPassInput.value.length>0" (click)="toggleEyeNewPass()" class="fa-regular fa-eye pass-icon text-main"></i>
+                        <i *ngIf="!eyeNewPass&&newPassInput.value.length>0" (click)="toggleEyeNewPass()" class="fa-regular fa-eye-slash  pass-icon text-main "></i> 
+                        <div *ngIf="passForm.get('password')?.errors&&(passForm.get('password')?.touched || newPassInput.value.length>0)" class="alert alert-danger">
+                            <p class="text-center" *ngIf="passForm.get('password')?.errors?.['required']">password is required</p>
+                            <p class="text-center" *ngIf="passForm.get('password')?.errors?.['pattern']">password must start with uppercase letter</p>
+                            <p class="text-center" *ngIf="passForm.get('password')?.errors?.['minlength']">minimum password length is 6</p>
+                        </div>
+                    </div>
+                    <div class="mb-40 position-relative ">
+                        <label for="renewpass">Re-password:</label>
+                        <input [(ngModel)]="inputRePassValue" #reNewPassInput formControlName="rePassword" id="renewpass" class="form-control mt-1" [type]="eyerePass?'password':'text'  " placeholder="Confirm new password">
+                        <i *ngIf="eyerePass&&reNewPassInput.value.length>0" (click)="toggleEyerePass()" class="fa-regular fa-eye pass-icon text-main"></i>
+                        <i *ngIf="!eyerePass&&reNewPassInput.value.length>0" (click)="toggleEyerePass()" class="fa-regular fa-eye-slash  pass-icon text-main "></i> 
+                        <div *ngIf="passForm.get('rePassword')?.errors&&(passForm.get('rePassword')?.touched || reNewPassInput.value.length>0)" class="alert alert-danger">
+                            <p class="text-center" *ngIf="passForm.get('rePassword')?.errors?.['required']">password is required</p>
+                            <p class="text-center" *ngIf="passForm.get('rePassword')?.errors?.['pattern']">password must start with uppercase letter</p>
+                            <p class="text-center" *ngIf="passForm.get('rePassword')?.errors?.['minlength']">minimum password length is 6</p>
+                        </div>
+                    </div>
+                    <button [disabled]="passForm.invalid" type="submit" class="btn bg-main text-white mt-3 mx-auto d-block"><span *ngIf="!isLoading">Confirm</span> <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i></button>
+                    <p  *ngIf="msgError" class="alert alert-danger my-2">{{msgError}}</p>
+                </form>
+            </div>
+            <!-- Change Pass Form End -->
+
+            <!-- Change Phone Form Start -->
+            <div *ngIf="phoneSettingFlag" class="form_phone my-4">
+                <h2 class="h4 text-center ">Phone settings </h2>
+                <form (ngSubmit)="changePhone()" [formGroup]="phoneForm" class="w-75 mx-auto" >
+                    <div>
+                        <label for="phone">Phone:</label>
+                        <input [(ngModel)]="inputPhoneValue" #phoneInput formControlName="phone" id="phone" class="form-control mt-1" type="text" placeholder="Enter new phone...">
+                        <div *ngIf="phoneForm.get('phone')?.errors&&(phoneForm.get('phone')?.touched || phoneInput.value.length>0)" class="alert alert-danger">
+                            <p class="text-center" *ngIf="phoneForm.get('phone')?.errors?.['required']">phone is required</p>
+                            <p class="text-center" *ngIf="phoneForm.get('phone')?.errors?.['pattern']">please enter valid phone number</p>
+                        </div>
+                    </div>
+                    <button [disabled]="phoneForm.invalid" type="submit" class="btn bg-main text-white mt-3 mx-auto d-block"><span *ngIf="!isLoading">Confirm</span> <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i></button>
+                </form>
+            </div>
+            <!-- Change Phone Form End -->
+
+            <!-- Change Email Form start -->
+            <div *ngIf="emailSettingFlag" class="form_email my-4">
+                <h2 class="h4 text-center ">Email settings </h2>
+                <form (ngSubmit)="changeEmail()" [formGroup]="emailForm" class="w-75 mx-auto" >
+                    <div>
+                        <label for="name">Email:</label>
+                        <input [(ngModel)]="inputEmailValue" #emailInput formControlName="email" id="email" class="form-control mt-1" type="text" placeholder="Enter new email...">
+                        <div *ngIf="nameForm.get('email')?.errors&&(nameForm.get('email')?.touched || emailInput.value.length>0)" class="alert alert-danger">
+                            <p class="text-center" *ngIf="nameForm.get('email')?.errors?.['required']">email is required</p>
+                            <p class="text-center" *ngIf="nameForm.get('email')?.errors?.['email']">Enter a valid email</p>
+                        </div>
+                    </div>
+                    <button [disabled]="emailForm.invalid" type="submit" class="btn bg-main text-white mt-3 mx-auto d-block"><span *ngIf="!isLoading">Confirm</span> <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i></button>
+                </form>
+            </div>
+            <!-- Change Email Form End -->
+
+        </div>
+    </div>
+</div>

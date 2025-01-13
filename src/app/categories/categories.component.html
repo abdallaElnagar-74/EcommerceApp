@@ -1,0 +1,14 @@
+<section class="container my-3">
+    <div class="row g-4">
+        <div  [routerLink]="['/categoryproducts',cat._id]" class="col-lg-3 col-md-4" *ngFor="let cat of allCategories">
+            <div class="d-flex justify-content-center flex-column align-items-center bg-body-tertiary shadow rounded cat">
+                <div>
+                    <img height="300" class="w-100 " [src]="cat?.image" alt="">
+                </div>
+                <div class="p-3 m-0">
+                    <h2 class="text-uppercase h4 text-main">{{cat?.name}}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
